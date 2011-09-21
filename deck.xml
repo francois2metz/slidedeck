@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-  <ModulePrefs title="af83deck" eight="100" width="550">
+  <ModulePrefs title="af83deck" height="100" width="550">
   <Require feature="dynamic-height"/>
   <Require feature="rpc"/>
 </ModulePrefs>
@@ -9,7 +9,8 @@
   <script type="text/javascript" src="//www.google.com/jsapi"></script>
   <script type="text/javascript">google.load("jquery", "1.6.0");</script>
   <script type="text/javascript"  src="http://hangoutsapi.appspot.com/static/hangout.js"></script>
-      <script type="text/javascript" src="http://af83deck.nodzle.af83.com/deck.js"></script>
+  <script type="text/javascript" src="http://af83deck.nodzle.af83.com/deck.js"></script>
+  <script type="text/javascript" src="http://af83deck.nodzle.af83.com/swfobject.js"></script>
 
   <link type="text/css" rel="stylesheet"
       href="http://af83deck.nodzle.af83.com/deck.css" />

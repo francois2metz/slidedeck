@@ -1,7 +1,5 @@
 /**
- * @fileoverview Logic for the Yes/No/Maybe app.
- *
- * @author Tim Blasi (Google)
+ * Share slide with the slideshare flash API
  */
 
 /** @enum {string} */
@@ -366,10 +364,6 @@ function render() {
       data[answer].sort(sortFunc);
     }
   }
-
-  container_
-      .empty()
-      .append(createAnswersTable(data));
 }
 
 /**
@@ -382,9 +376,8 @@ function render() {
  *     shared state.
  */
 function onStateChanged(add, remove, state, metadata) {
-  state_ = state;
-  metadata_ = metadata;
-  render();
+    var slide = state.slide;
+    var player = $('#player').get(0).jumpTo(parseInt(slide, 10));
 }
 
 /**
@@ -398,139 +391,39 @@ function onParticipantsChanged(participants) {
   render();
 }
 
+function loadPlayer() {
+    //allowScriptAccess from other domains
+    var params = { allowScriptAccess: "always" };
+    var atts = { id: "player" };
+
+    //doc: The path of the file to be used
+    //startSlide: The number of the slide to start from
+    //rel: Whether to show a screen with related slideshows at the end or not. 0 means false and 1 is true..
+    var flashvars = { doc : "thirst-upload-800x600-1215534320518707-8", startSlide : 1, rel : 0 };
+
+    //Generate the embed SWF file
+    swfobject.embedSWF("http://static.slidesharecdn.com/swf/ssplayer2.swf", "player", "598", "480", "8", null, flashvars, params, atts);
+}
+
+//Jump to the appropriate slide
+function jumpTo(){
+    flashMovie.jumpTo(parseInt(document.getElementById("slidenumber").value));
+}
+
 /**
  * Create required DOM elements and listeners.
  */
 function prepareAppDOM() {
-  statusInput_ = $('<input />')
-      .attr({
-        'id': 'status-input',
-        'type': 'text',
-        'maxlength': MAX_STATUS_LENGTH
-      });
-  statusForm_ = $('<form />')
-      .attr({
-        'action': '',
-        'id': 'status-form'
-      })
-      .append(statusInput_);
-
-  var statusDiv = $('<div />')
-      .attr('id', 'status-box')
-      .addClass('status-box')
-      .append(statusForm_);
-
-  statusForm_.submit(function() {
-    onSubmitStatus();
-    return false;
-  });
-
-  statusInput_.keypress(function(e) {
-    if (e.which === 13) {
-      defer(onSubmitStatus);
-    }
-    e.stopPropagation();
-  }).blur(function(e) {
-    onSubmitStatus();
-    e.stopPropagation();
-  }).mousedown(function(e) {
-    e.stopPropagation();
-  }).hide();
-
-  container_ = $('<div />');
-
-  var body = $('body');
-  body.mousedown(function(e) {
-    if (statusVisible_) {
-      onSubmitStatus();
-    }
-    e.stopPropagation();
-  }).append(container_, statusDiv);
+    $('body').append($('<div>').attr('id', 'player'));
+    loadPlayer();
+    $('body').append($('<button>').text('Next').click(function() {
+        var player = $('#player').get(0);
+        player.next();
+        var slide = player.getCurrentSlide();
+        gapi.hangout.data.submitDelta({slide: slide}, {});
+    }));
 }
 
-/**
- * Creates the DOM element that shows the button for each response and displays
- * each participant under his answer.
- * @param {!Object.<!string, *>} data The information used to populate the
- *     table.
- * @return {Element} The DOM element displaying the app's main interface.
- */
-function createAnswersTable(data) {
-  var buttonRow = $('<tr />');
-
-  var onButtonMouseDown = function() {
-    $(this).addClass('selected');
-  };
-  var getButtonMouseUpHandler = function(ans) {
-    return function() {
-      $(this).removeClass('selected');
-      onAnswer(ans);
-    };
-  };
-
-  // Create buttons for each possible response.
-  for (var key in Answers) {
-    if (Answers.hasOwnProperty(key)) {
-      var ans = Answers[key];
-
-      var numAnswered = $('<span />')
-          .text(' (' + data[ans].length + ')');
-      var ansLink = $('<a />')
-          .attr('href', '#')
-          .text(DEFAULT_STATUS[ans])
-          .append(numAnswered)
-          .click(function() {
-            return false;
-          });
-      var ansBtn = $('<div />')
-          .addClass('button')
-          .append(ansLink)
-          .mousedown(onButtonMouseDown)
-          .mouseup(getButtonMouseUpHandler(ans));
-
-      var respondList = $('<ul />');
-      for (var i = 0, iLen = data[ans].length; i < iLen; ++i) {
-        respondList.append(createParticipantElement(data[ans][i], ans));
-      }
-
-      var ansCell = $('<td />')
-          .attr('id', key)
-          .append(ansBtn, respondList);
-
-      // Add list of participants below each button.
-      buttonRow.append(ansCell);
-    }
-  }
-
-  var table = $('<table />')
-      .attr({
-        'cellspacing': '2',
-        'cellpadding': '0',
-        'summary': '',
-        'width': '100%'
-      }).append(buttonRow);
-
-  if (!data.responded) {
-    var instructImg = $('<img />')
-       .attr({
-         'src': '//hangoutsapi.appspot.com/static/yesnomaybe/directions.png',
-         'title': 'Make a selection'
-       });
-    var instructText = $('<div />')
-        .text('Click an option to cast your vote');
-    var footDiv = $('<div />').append(instructImg, instructText);
-    var footCell = $('<td colspan="3" />')
-        .append(footDiv);
-    var footRow = $('<tr />')
-        .attr('id', 'footer')
-        .addClass('footer')
-        .append(footCell);
-
-    table.append(footRow);
-  }
-
-  return table;
-}
 
 /**
  * Creates the DOM element that shows a single participant's answer.
