@@ -420,7 +420,7 @@ function prepareAppDOM() {
         var player = $('#player').get(0);
         player.next();
         var slide = player.getCurrentSlide();
-        gapi.hangout.data.submitDelta({slide: slide}, {});
+        gapi.hangout.data.submitDelta({slide: ""+slide}, []);
     }));
 }
 
