@@ -9,10 +9,10 @@
   <script type="text/javascript" src="//www.google.com/jsapi"></script>
   <script type="text/javascript">google.load("jquery", "1.6.0");</script>
   <script type="text/javascript"  src="http://hangoutsapi.appspot.com/static/hangout.js"></script>
-      <script type="text/javascript" src="http://plus.2metz.fr/deck.js"></script>
+      <script type="text/javascript" src="http://af83deck.nodzle.af83.com/deck.js"></script>
 
   <link type="text/css" rel="stylesheet"
-      href="http://plus.2metz.fr/deck.css" />
+      href="http://af83deck.nodzle.af83.com/deck.css" />
 
 ]]></Content>
 </Module>
