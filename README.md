@@ -1,15 +1,15 @@
 # SlideDeck
 
-This is a basic application to synchronize the current slide of a slideshare prez with all participants of a google+ Hangouts.
+This is a basic application to synchronize the current slide of a slideshare prez with all participants of a google+ hangout.
 
 ## Usage
 
-In https://code.google.com/apis/console/, add a new project 'slidedeck':
+In https://code.google.com/apis/console/, add a new project **slidedeck**:
 
 * Redirect: http://af83deck.nodzle.af83.com/oauth2callback
 * logo: http://af83deck.nodzle.af83.com/poney.png
 
-In hangouts tab, add 'http://af83deck.nodzle.af83.com/deck.xml' and click on *Enter a hangout!*.
+In *Hangouts* tab, add 'http://af83deck.nodzle.af83.com/deck.xml' and click on *Enter a hangout!*.
 
 ## Todo
 
@@ -26,4 +26,4 @@ In hangouts tab, add 'http://af83deck.nodzle.af83.com/deck.xml' and click on *En
 
 (c) 2011 François de Metz
 
-With help of belgian beers and some folks of @af83 developers.
+With help of belgian beers and some af83's developers.
