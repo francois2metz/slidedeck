@@ -30,17 +30,26 @@ function loadPlayer() {
     swfobject.embedSWF("http://static.slidesharecdn.com/swf/ssplayer2.swf", "player", "598", "300", "8", null, flashvars, params, atts);
 }
 
+function sendCurrentSlide() {
+    var player = $('#player').get(0);
+    var slide = player.getCurrentSlide();
+    gapi.hangout.data.submitDelta({slide: ""+slide}, []);
+}
+
 /**
  * Create required DOM elements and listeners.
  */
 function prepareAppDOM() {
     $('body').append($('<div>').attr('id', 'player'));
     loadPlayer();
+    var player = $('#player').get(0);
     $('body').append($('<button>').text('Next').click(function() {
-        var player = $('#player').get(0);
         player.next();
-        var slide = player.getCurrentSlide();
-        gapi.hangout.data.submitDelta({slide: ""+slide}, []);
+        sendCurrentSlide();
+    }));
+    $('body').append($('<button>').text('Previous').click(function() {
+        player.previous();
+        sendCurrentSlide();
     }));
 }
 
